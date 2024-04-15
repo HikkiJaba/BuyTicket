@@ -33,7 +33,10 @@ function App() {
   }, []);
 
   const applyFilters = () => {
-    let filteredData = data;
+    if (!data) return [];
+    
+    let filteredData = [...data];
+
     if (!selectedFilters.all) {
       filteredData = filteredData.filter(item => {
         if (selectedFilters.noTransfers && item.number_of_changes === 0) return true;
@@ -54,10 +57,12 @@ function App() {
   };
 
   const sortByCheapest = () => {
+    if (!data) return;
     setData(prevData => [...prevData].sort((a, b) => a.value - b.value));
   };
 
   const sortByFastest = () => {
+    if (!data) return;
     setData(prevData => [...prevData].sort((a, b) => a.distance - b.distance));
   };
 

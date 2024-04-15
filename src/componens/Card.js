@@ -1,11 +1,28 @@
 import React, { useState } from "react";
-import arrow from "../img/arrow.png"
+import arrow from "../img/arrow.png";
+import BookingForm from "./Booking";
 
 const Card = ({origin, destination, distance, depart_date, return_date, value, gate, number_of_changes, trip_class}) => {
     const [expanded, setExpanded] = useState(false);
+    const [showBookingForm, setShowBookingForm] = useState(false);
+    const [bookingRequested, setBookingRequested] = useState(false);
+    const [bookingSuccess, setBookingSuccess] = useState(false);
 
     const handleCardClick = () => {
-        setExpanded(!expanded);
+        if (!bookingRequested) {
+            setExpanded(!expanded);
+        }
+    };
+
+    const handleBookingButtonClick = () => {
+        setShowBookingForm(true);
+        setBookingRequested(true);
+    };
+
+    const handleBooking = (formData) => {
+        console.log("Booking Data:", formData);
+        setShowBookingForm(false);
+        setBookingSuccess(true);
     };
 
     return (
@@ -25,6 +42,9 @@ const Card = ({origin, destination, distance, depart_date, return_date, value, g
                     <p className="trip_class">Какой класс: {trip_class === 0 ? 'Эконом' : trip_class === 1 ? 'Бизнес' : 'Эконом/Бизнес'} </p>
                     </>
                 )}
+                {!bookingRequested && !bookingSuccess && <button onClick={handleBookingButtonClick} className="booking-button-one">Забронировать</button>}
+                {bookingSuccess && <div className="good-message">Успешно забронировано!</div>}
+                {showBookingForm && <BookingForm handleBooking={handleBooking} />}
             </div>
         </div>
     );

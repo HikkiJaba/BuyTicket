@@ -10,7 +10,6 @@ export default function FilterCheapFast({ sortByCheapest, sortByFastest }) {
             type="radio" 
             name="radio" 
             onChange={sortByCheapest} 
-            checked
           />
           <div className="radio-tile">
             <label htmlFor="filter-cheap">Самый дешёвый</label>
