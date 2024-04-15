@@ -1,10 +1,11 @@
-import "./App.css"
+import "./App.css";
 import React, { useEffect, useState } from 'react';
 import Header from './componens/header';
 import FilterTransfer from './componens/filterTransfer';
 import FilterCheapFast from './componens/filterCheapFast';
 import axios from 'axios';
 import Card from './componens/Card';
+import SearchBar from "./componens/SearchBar";
 
 function App() {
   const [data, setData] = useState(null);
@@ -16,7 +17,8 @@ function App() {
     twoTransfers: false,
     threeTransfers: false,
   });
-
+  const [searchTerm, setSearchTerm] = useState('');
+  
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -32,10 +34,10 @@ function App() {
     fetchData();
   }, []);
 
-  const applyFilters = () => {
-    if (!data) return [];
+  const applyFilters = (dataToFilter) => {
+    if (!dataToFilter) return [];
     
-    let filteredData = [...data];
+    let filteredData = [...dataToFilter];
 
     if (!selectedFilters.all) {
       filteredData = filteredData.filter(item => {
@@ -49,6 +51,10 @@ function App() {
     return filteredData;
   };
 
+  const handleSearch = (searchTerm) => {
+    setSearchTerm(searchTerm);
+  };
+
   const handleFilterChange = (filter) => {
     setSelectedFilters(prevState => ({
       ...prevState,
@@ -57,12 +63,10 @@ function App() {
   };
 
   const sortByCheapest = () => {
-    if (!data) return;
     setData(prevData => [...prevData].sort((a, b) => a.value - b.value));
   };
 
   const sortByFastest = () => {
-    if (!data) return;
     setData(prevData => [...prevData].sort((a, b) => a.distance - b.distance));
   };
 
@@ -70,25 +74,30 @@ function App() {
     <div className="App">
       <Header />
       <div className='filterMain'>
-        <FilterTransfer handleFilterChange={handleFilterChange} selectedFilters={selectedFilters} />
+        <div className="filterTwo">  
+          <FilterTransfer handleFilterChange={handleFilterChange} selectedFilters={selectedFilters} />
+          <SearchBar onSearch={handleSearch} />
+        </div>
         <div>
           <FilterCheapFast sortByCheapest={sortByCheapest} sortByFastest={sortByFastest} />
           {loading ? (
             <div className='loading'>Loading...</div>
           ) : (
             <div className='card-container'>
-              {applyFilters().map((item, index) => (
-                <Card key={index} 
-                  origin={item.origin}
-                  destination={item.destination} 
-                  distance={item.distance} 
-                  depart_date={item.depart_date} 
-                  return_date={item.return_date} 
-                  value={item.value} 
-                  gate={item.gate} 
-                  number_of_changes={item.number_of_changes} 
-                  trip_class={item.trip_class}/>
-              ))}
+              {applyFilters(data)
+                .filter(item => item.origin.toLowerCase().includes(searchTerm.toLowerCase()))
+                .map((item, index) => (
+                  <Card key={index} 
+                    origin={item.origin}
+                    destination={item.destination} 
+                    distance={item.distance} 
+                    depart_date={item.depart_date} 
+                    return_date={item.return_date} 
+                    value={item.value} 
+                    gate={item.gate} 
+                    number_of_changes={item.number_of_changes} 
+                    trip_class={item.trip_class}/>
+                ))}
             </div>
           )}
         </div>
