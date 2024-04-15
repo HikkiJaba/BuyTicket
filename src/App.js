@@ -53,13 +53,21 @@ function App() {
     }));
   };
 
+  const sortByCheapest = () => {
+    setData(prevData => [...prevData].sort((a, b) => a.value - b.value));
+  };
+
+  const sortByFastest = () => {
+    setData(prevData => [...prevData].sort((a, b) => a.distance - b.distance));
+  };
+
   return (
     <div className="App">
       <Header />
       <div className='filterMain'>
         <FilterTransfer handleFilterChange={handleFilterChange} selectedFilters={selectedFilters} />
         <div>
-          <FilterCheapFast />
+          <FilterCheapFast sortByCheapest={sortByCheapest} sortByFastest={sortByFastest} />
           {loading ? (
             <div className='loading'>Loading...</div>
           ) : (
