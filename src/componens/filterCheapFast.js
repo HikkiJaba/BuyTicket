@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function FilterCheapFast({ sortByCheapest, sortByFastest }) {
+const FilterCheapFast = ({ sortByCheapest, sortByFastest }) => {
   return (
     <div className="container">
       <div className="radio-tile-group">
@@ -30,3 +30,5 @@ export default function FilterCheapFast({ sortByCheapest, sortByFastest }) {
     </div>
   );
 }
+
+export default FilterCheapFast;

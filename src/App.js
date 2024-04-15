@@ -65,7 +65,7 @@ function App() {
   const sortByCheapest = () => {
     setData(prevData => [...prevData].sort((a, b) => a.value - b.value));
   };
-
+  
   const sortByFastest = () => {
     setData(prevData => [...prevData].sort((a, b) => a.distance - b.distance));
   };
